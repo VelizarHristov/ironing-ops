@@ -9,7 +9,9 @@ scalaVersion := "2.12.4"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+
 libraryDependencies += "com.typesafe.slick" %% "slick-codegen" % "3.2.1"
+libraryDependencies += "org.postgresql"     %  "postgresql"    % "42.1.4"
 libraryDependencies ++= Seq(evolutions, jdbc)
 
 // Adds additional packages into Twirl
