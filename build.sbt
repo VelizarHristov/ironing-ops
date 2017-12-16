@@ -9,6 +9,7 @@ scalaVersion := "2.12.3"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+libraryDependencies += "com.typesafe.slick" %% "slick-codegen" % "3.2.1"
 libraryDependencies ++= Seq(evolutions, jdbc)
 
 // Adds additional packages into Twirl
