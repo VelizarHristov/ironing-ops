@@ -49,6 +49,16 @@ class CustomerController @Inject()(repo: CustomerRepository,
       }
     )
   }
+
+  def delete(id: Long) = Action.async { implicit request =>
+    repo.delete(id).map(x =>
+      if (x)
+        Redirect(routes.CustomerController.index).flashing("success" -> "customer.deleted")
+      else
+        NotFound
+    )
+  }
+
 }
 
 case class CustomerForm(nickname: String, email: String, firstName: String, lastName: String,

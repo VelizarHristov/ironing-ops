@@ -1,11 +1,13 @@
 @(customers: Seq[Customer])(implicit request: MessagesRequestHeader)
 
+@import helper.CSRF
+
 @main("Customers") {
 
     <a href='@routes.CustomerController.newCustomer()'>New customer</a>
 
     <table>
-        <tr>
+        <tr colspan="2">
             <th>id</th>
             <th>nickname</th>
             <th>email</th>
@@ -27,6 +29,10 @@
             <td>@customer.phoneMobile</td>
             <td>@customer.paymentSchemeString</td>
             <td>@customer.notes</td>
+            <td>@helper.form(action = routes.CustomerController.delete(customer.id)) {
+                @CSRF.formField
+                <input type="submit" value="Delete" />
+            }</td>
         </tr>
     }
     </table>
