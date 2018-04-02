@@ -4,23 +4,23 @@
 
 @main("Customers") {
 
-    <a href='@routes.CustomerController.newCustomer()'>New customer</a>
-
-    <table>
-        <tr colspan="2">
-            <th>id</th>
-            <th>nickname</th>
-            <th>email</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Phone home</th>
-            <th>Phone mobile</th>
-            <th>Payment scheme</th>
-            <th>Notes</th>
-        </tr>
+    <a class="btn btn-secondary btn-lg" role="button" href='@routes.CustomerController.newCustomer()'>New customer</a>
+    <table class="table table-striped" border="1">
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Nickname</th>
+                <th>Email</th>
+                <th>Phone home</th>
+                <th>Phone mobile</th>
+                <th>Scheme</th>
+                <th>Notes</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
     @for(customer <- customers){
         <tr>
-            <td>@customer.id</td>
             <td>@customer.nickname</td>
             <td>@customer.email</td>
             <td>@customer.firstName</td>
@@ -29,10 +29,10 @@
             <td>@customer.phoneMobile</td>
             <td>@customer.paymentSchemeString</td>
             <td>@customer.notes</td>
-            <td><a href='@routes.CustomerController.edit(customer.id)'>Edit</a></td>
+            <td><a class="btn btn-secondary" role="button" href='@routes.CustomerController.edit(customer.id)'>Edit</a></td>
             <td>@helper.form(action = routes.CustomerController.delete(customer.id)) {
                 @CSRF.formField
-                <input type="submit" value="Delete" />
+                <input type="submit" class="btn btn-danger" role="button" value="Delete" />
             }</td>
         </tr>
     }
