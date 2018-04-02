@@ -1,27 +1,26 @@
 @(customer: Form[CustomerForm])(implicit request: MessagesRequestHeader)
 
-@import helper.{inputText, inputRadioGroup, CSRF}
+@isEdit = @{ customer("id").value.isDefined }
 
 @main("Ironing") {
-    @helper.form(
-        if (customer("id").value.isDefined)
-            routes.CustomerController.update()
-        else
-            routes.CustomerController.create()
-    ) {
-        @inputText(customer("nickname"))
-        @inputText(customer("email"))
-        @inputText(customer("firstName"))
-        @inputText(customer("lastName"))
-        @inputText(customer("phoneHome"))
-        @inputText(customer("phoneMobile"))
-        @inputText(customer("notes"))
-        @inputRadioGroup(customer("paymentScheme"), Seq("0" -> "Flat rate", "1" -> "Itemized"))
+    @b4.vertical.form(if (isEdit) routes.CustomerController.update() else routes.CustomerController.create()) { implicit vfc =>
+
+        <h1>@if(isEdit) { Editing } else { New } customer</h1>
+
+        @b4.text(customer("firstName"), '_label -> "First name")
+        @b4.text(customer("lastName"), '_label -> "Last name")
+        @b4.text(customer("nickname"), '_label -> "Nickname")
+        @b4.email(customer("email"), '_label -> "Email")
+        @b4.text(customer("phoneHome"), '_label -> "Phone home")
+        @b4.text(customer("phoneMobile"), '_label -> "Phone mobile")
+        @b4.textarea(customer("notes"), '_label -> "Notes")
+        @b4.radio(customer("paymentScheme"), Seq("0" -> "Flat rate", "1" -> "Itemized"), '_label -> "Payment scheme")
 
         <input type="hidden" name="id" value='@customer("id").value' >
 
-        @CSRF.formField
+        @helper.CSRF.formField
 
-        <input type="submit" value="Submit"/>
+        <input type="submit" class="btn btn-secondary" value="Submit"/>
+        <a class="btn btn-secondary" role="button" href='@routes.CustomerController.index()'>Back to customers</a>
     }
 }
