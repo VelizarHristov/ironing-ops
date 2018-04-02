@@ -1,6 +1,9 @@
 @(customers: Seq[Customer])(implicit request: MessagesRequestHeader)
 
 @main("Customers") {
+
+    <a href='@routes.CustomerController.newCustomer()'>New customer</a>
+
     <table>
         <tr>
             <th>id</th>

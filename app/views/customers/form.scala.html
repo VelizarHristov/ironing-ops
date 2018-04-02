@@ -1,0 +1,20 @@
+@(customer: Form[CustomerForm])(implicit request: MessagesRequestHeader)
+
+@import helper.{inputText, inputRadioGroup, CSRF}
+
+@main("Ironing") {
+    @helper.form(routes.CustomerController.create()) {
+        @inputText(customer("nickname"))
+        @inputText(customer("email"))
+        @inputText(customer("firstName"))
+        @inputText(customer("lastName"))
+        @inputText(customer("phoneHome"))
+        @inputText(customer("phoneMobile"))
+        @inputText(customer("notes"))
+        @inputRadioGroup(customer("paymentScheme"), Seq("0" -> "Flat rate", "1" -> "Itemized"))
+
+        @CSRF.formField
+
+        <input type="submit" value="Submit"/>
+    }
+}

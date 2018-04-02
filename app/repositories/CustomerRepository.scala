@@ -35,4 +35,8 @@ class CustomerRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   def list(): Future[Seq[Customer]] = db.run {
     customers.result
   }
+
+  def create(customer: Customer): Future[Int] = db.run {
+    customers += customer
+  }
 }
