@@ -1,0 +1,26 @@
+@(categories: Seq[Category])(implicit request: MessagesRequestHeader)
+
+@import helper.CSRF
+
+@main("Categories") {
+
+    <a class="btn btn-secondary btn-lg" role="button" href='@routes.CategoryController.newCategory()'>New category</a>
+    <table class="table table-striped" border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        @for(category <- categories){
+            <tr>
+                <td>@category.name</td>
+                <td><a class="btn btn-secondary" role="button" href='@routes.CategoryController.edit(category.id)'>Edit</a></td>
+                <td>@helper.form(action = routes.CategoryController.delete(category.id)) {
+                    @CSRF.formField
+                    <input type="submit" class="btn btn-danger" value="Delete" />
+                }</td>
+            </tr>
+        }
+    </table>
+}

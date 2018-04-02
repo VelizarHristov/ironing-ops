@@ -7,5 +7,12 @@ POST    /customers                  controllers.CustomerController.create
 POST    /customers/update           controllers.CustomerController.update
 POST    /customers/delete/:id       controllers.CustomerController.delete(id: Long)
 
+GET     /categories                 controllers.CategoryController.index
+GET     /categories/new             controllers.CategoryController.newCategory
+GET     /categories/edit/:id        controllers.CategoryController.edit(id: Long)
+POST    /categories                 controllers.CategoryController.create
+POST    /categories/update          controllers.CategoryController.update
+POST    /categories/delete/:id      controllers.CategoryController.delete(id: Long)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -1,0 +1,19 @@
+@(category: Form[CategoryForm])(implicit request: MessagesRequestHeader)
+
+@isEdit = @{ category("id").value.isDefined }
+
+@main("Ironing") {
+    @b4.vertical.form(if (isEdit) routes.CategoryController.update() else routes.CategoryController.create()) { implicit vfc =>
+
+        <h1>@if(isEdit) { Editing } else { New } category</h1>
+
+        @b4.text(category("name"), '_label -> "* Name")
+
+        <input type="hidden" name="id" value='@category("id").value' >
+
+        @helper.CSRF.formField
+
+        <input type="submit" class="btn btn-secondary" value="Submit"/>
+        <a class="btn btn-secondary" role="button" href='@routes.CategoryController.index()'>Back to categories</a>
+    }
+}
