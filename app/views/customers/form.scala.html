@@ -3,7 +3,12 @@
 @import helper.{inputText, inputRadioGroup, CSRF}
 
 @main("Ironing") {
-    @helper.form(routes.CustomerController.create()) {
+    @helper.form(
+        if (customer("id").value.isDefined)
+            routes.CustomerController.update()
+        else
+            routes.CustomerController.create()
+    ) {
         @inputText(customer("nickname"))
         @inputText(customer("email"))
         @inputText(customer("firstName"))
@@ -12,6 +17,8 @@
         @inputText(customer("phoneMobile"))
         @inputText(customer("notes"))
         @inputRadioGroup(customer("paymentScheme"), Seq("0" -> "Flat rate", "1" -> "Itemized"))
+
+        <input type="hidden" name="id" value='@customer("id").value' >
 
         @CSRF.formField
 

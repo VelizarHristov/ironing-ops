@@ -36,8 +36,20 @@ class CustomerRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
     customers.result
   }
 
+  def byId(id: Long): Future[Option[Customer]] = {
+    db.run {
+      customers.filter(_.id === id).result
+    }.map(_.headOption)
+  }
+
   def create(customer: Customer): Future[Int] = db.run {
     customers += customer
+  }
+
+  def update(customer: Customer): Future[Boolean] = {
+    db.run {
+      customers.filter(_.id === customer.id).update(customer)
+    }.map(_ == 1)
   }
 
   def delete(id: Long): Future[Boolean] = {

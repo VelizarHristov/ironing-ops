@@ -37,6 +37,15 @@ class CustomerController @Inject()(repo: CustomerRepository,
     Ok(views.html.customers.form(customerForm))
   }
 
+  def edit(id: Long) = Action.async { implicit request =>
+    repo.byId(id).map {
+      case Some(customer) => Ok(views.html.customers.form(
+        customerForm.fill(CustomerForm.fromCustomer(customer))
+      ))
+      case None => NotFound
+    }
+  }
+
   def create() = Action.async { implicit request =>
     customerForm.bindFromRequest.fold(
       errorForm => {
@@ -45,6 +54,19 @@ class CustomerController @Inject()(repo: CustomerRepository,
       form => {
         repo.create(form.toCustomer).map(_ =>
           Redirect(routes.CustomerController.index).flashing("success" -> "customer.created")
+        )
+      }
+    )
+  }
+
+  def update() = Action.async { implicit request =>
+    customerForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(Ok(views.html.customers.form(errorForm)))
+      },
+      form => {
+        repo.update(form.toCustomer).map(_ =>
+          Redirect(routes.CustomerController.index).flashing("success" -> "customer.updated")
         )
       }
     )
@@ -64,4 +86,8 @@ class CustomerController @Inject()(repo: CustomerRepository,
 case class CustomerForm(nickname: String, email: String, firstName: String, lastName: String,
                         phoneHome: String, phoneMobile: String, paymentScheme: Int, notes: String, id: Long) {
   lazy val toCustomer: Customer = Customer(nickname, email, firstName, lastName, phoneHome, phoneMobile, notes, paymentScheme, id = id)
+}
+
+object CustomerForm {
+  def fromCustomer(c: Customer) = CustomerForm(c.nickname, c.email, c.firstName, c.lastName, c.phoneHome, c.phoneMobile, c.paymentScheme, c.notes, c.id)
 }

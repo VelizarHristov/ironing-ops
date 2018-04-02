@@ -29,6 +29,7 @@
             <td>@customer.phoneMobile</td>
             <td>@customer.paymentSchemeString</td>
             <td>@customer.notes</td>
+            <td><a href='@routes.CustomerController.edit(customer.id)'>Edit</a></td>
             <td>@helper.form(action = routes.CustomerController.delete(customer.id)) {
                 @CSRF.formField
                 <input type="submit" value="Delete" />
