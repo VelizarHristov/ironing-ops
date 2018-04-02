@@ -9,12 +9,15 @@
 
         @b4.text(customer("firstName"), '_label -> "First name")
         @b4.text(customer("lastName"), '_label -> "Last name")
-        @b4.text(customer("nickname"), '_label -> "Nickname")
+        @b4.text(customer("nickname"), '_label -> "* Nickname")
         @b4.email(customer("email"), '_label -> "Email")
         @b4.text(customer("phoneHome"), '_label -> "Phone home")
         @b4.text(customer("phoneMobile"), '_label -> "Phone mobile")
         @b4.textarea(customer("notes"), '_label -> "Notes")
-        @b4.radio(customer("paymentScheme"), Seq("0" -> "Flat rate", "1" -> "Itemized"), '_label -> "Payment scheme")
+        @b4.radio(customer("paymentScheme"),
+            Seq("0" -> "Flat rate", "1" -> "Itemized"),
+            '_label -> "* Payment scheme",
+            'required -> "true")
 
         <input type="hidden" name="id" value='@customer("id").value' >
 

@@ -22,7 +22,7 @@ class CustomerController @Inject()(repo: CustomerRepository,
   val customerForm = Form {
     mapping(
       "nickname" -> nonEmptyText,
-      "email" -> nonEmptyText,
+      "email" -> text,
       "firstName" -> text,
       "lastName" -> text,
       "phoneHome" -> text,
