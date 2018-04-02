@@ -1,0 +1,30 @@
+@(customers: Seq[Customer])(implicit request: MessagesRequestHeader)
+
+@main("Customers") {
+    <table>
+        <tr>
+            <th>id</th>
+            <th>nickname</th>
+            <th>email</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Phone home</th>
+            <th>Phone mobile</th>
+            <th>Payment scheme</th>
+            <th>Notes</th>
+        </tr>
+    @for(customer <- customers){
+        <tr>
+            <td>@customer.id</td>
+            <td>@customer.nickname</td>
+            <td>@customer.email</td>
+            <td>@customer.firstName</td>
+            <td>@customer.lastName</td>
+            <td>@customer.phoneHome</td>
+            <td>@customer.phoneMobile</td>
+            <td>@customer.paymentSchemeString</td>
+            <td>@customer.notes</td>
+        </tr>
+    }
+    </table>
+}

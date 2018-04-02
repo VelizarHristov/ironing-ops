@@ -6,7 +6,7 @@ import models.Customer
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CustomerRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
@@ -31,4 +31,8 @@ class CustomerRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   }
 
   private val customers = TableQuery[CustomersTable]
+
+  def list(): Future[Seq[Customer]] = db.run {
+    customers.result
+  }
 }
