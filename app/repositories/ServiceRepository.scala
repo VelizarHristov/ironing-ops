@@ -43,9 +43,9 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
     services += service
   }
 
-  def update(service: Service): Future[Boolean] = {
+  def update(id: Long, name: String, categoryId: Long): Future[Boolean] = {
     db.run {
-      services.filter(_.id === service.id).update(service)
+      services.filter(_.id === id).map(s => (s.name, s.categoryId)).update(name, categoryId)
     }.map(_ == 1)
   }
 

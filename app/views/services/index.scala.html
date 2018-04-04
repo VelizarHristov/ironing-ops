@@ -6,7 +6,7 @@
 
     <a class="btn btn-secondary btn-lg" role="button" href='@routes.ServiceController.newService()'>New service</a>
     <a class="btn btn-secondary btn-lg" role="button" href='@routes.CategoryController.index()'>Service categories</a>
-    <table class="table table-striped" border="1">
+    <table class="table table-striped" border="2">
         <thead>
             <tr>
                 <th>Name</th>
@@ -20,6 +20,7 @@
                 <td>@service.name</td>
                 <td>@service.price</td>
                 <td>@category.name</td>
+                <td><a class="btn btn-secondary" role="button" href='@routes.ServiceController.edit(service.id)'>Edit</a></td>
                 <td>@helper.form(action = routes.ServiceController.delete(service.id)) {
                     @CSRF.formField
                     <input type="submit" class="btn btn-danger" value="Delete" />
