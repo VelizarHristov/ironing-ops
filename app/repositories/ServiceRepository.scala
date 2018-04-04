@@ -20,7 +20,7 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
     def price = column[BigDecimal]("price")
-    def categoryId = column[Int]("category_id")
+    def categoryId = column[Long]("category_id")
     def active = column[Boolean]("active")
 
     def * = (name, price, categoryId, active, id) <>
@@ -30,7 +30,7 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
   private val services = TableQuery[ServicesTable]
 
   def list(): Future[Seq[(Service, Category)]] = db.run {
-    services.join(categories).result
+    services.join(categories).on(_.categoryId === _.id).result
   }
 
   def byId(id: Long): Future[Option[Service]] = {

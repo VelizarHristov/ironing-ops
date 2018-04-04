@@ -24,7 +24,7 @@ class ServiceController @Inject()(repo: ServiceRepository,
     mapping(
       "name" -> nonEmptyText,
       "price" -> bigDecimal,
-      "categoryId" -> number,
+      "categoryId" -> longNumber,
       "id" -> default(longNumber, 0l)
     )(NewServiceForm.apply)(NewServiceForm.unapply)
   }
@@ -61,7 +61,7 @@ class ServiceController @Inject()(repo: ServiceRepository,
 
 }
 
-case class NewServiceForm(name: String, price: BigDecimal, categoryId: Int, id: Long) {
+case class NewServiceForm(name: String, price: BigDecimal, categoryId: Long, id: Long) {
   lazy val toService: Service = Service(name, price, categoryId, true, id)
 }
 
