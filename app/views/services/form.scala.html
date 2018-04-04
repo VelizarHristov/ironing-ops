@@ -1,4 +1,4 @@
-@(service: Form[NewServiceForm])(implicit request: MessagesRequestHeader)
+@(service: Form[NewServiceForm], categories: Seq[Category])(implicit request: MessagesRequestHeader)
 
 @main("Ironing") {
     @b4.vertical.form(routes.ServiceController.create()) { implicit vfc =>
@@ -7,7 +7,7 @@
 
         @b4.text(service("name"), '_label -> "* Name")
         @b4.text(service("price"), '_label -> "* Price")
-        @b4.text(service("categoryId"), '_label -> "* categoryId")
+        @b4.select(service("categoryId"), categories.map(c => (c.id.toString, c.name)), '_label -> "* Category")
 
         @helper.CSRF.formField
 

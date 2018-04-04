@@ -5,14 +5,15 @@ import models.Service
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import repositories.ServiceRepository
+import repositories.{CategoryRepository, ServiceRepository}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ServiceController @Inject()(repo: ServiceRepository,
-                                   cc: MessagesControllerComponents,
-                                   implicit val ec: ExecutionContext) extends MessagesAbstractController(cc) {
+                                  categoryRepo: CategoryRepository,
+                                  cc: MessagesControllerComponents,
+                                  implicit val ec: ExecutionContext) extends MessagesAbstractController(cc) {
   def index() = Action.async { implicit request =>
     repo.list().map { services =>
       Ok(views.html.services.index(services))
@@ -28,14 +29,18 @@ class ServiceController @Inject()(repo: ServiceRepository,
     )(NewServiceForm.apply)(NewServiceForm.unapply)
   }
 
-  def newService() = Action { implicit request =>
-    Ok(views.html.services.form(newServicesForm))
+  def newService() = Action.async { implicit request =>
+    categoryRepo.list().map { categories =>
+      Ok(views.html.services.form(newServicesForm, categories))
+    }
   }
 
   def create() = Action.async { implicit request =>
     newServicesForm.bindFromRequest.fold(
       errorForm => {
-        Future.successful(Ok(views.html.services.form(errorForm)))
+        categoryRepo.list().map { categories =>
+          Ok(views.html.services.form(errorForm, categories))
+        }
       },
       form => {
         repo.create(form.toService).map(_ =>
