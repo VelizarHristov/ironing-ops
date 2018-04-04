@@ -1,0 +1,29 @@
+@(services: Seq[Service])(implicit request: MessagesRequestHeader)
+
+@import helper.CSRF
+
+@main("Categories") {
+
+    <a class="btn btn-secondary btn-lg" role="button" href='@routes.ServiceController.newService()'>New service</a>
+    <table class="table table-striped" border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category ID</th>
+                <th colspan="1">Actions</th>
+            </tr>
+        </thead>
+        @for(service <- services){
+            <tr>
+                <td>@service.name</td>
+                <td>@service.price</td>
+                <td>@service.categoryId</td>
+                <td>@helper.form(action = routes.ServiceController.delete(service.id)) {
+                    @CSRF.formField
+                    <input type="submit" class="btn btn-danger" value="Delete" />
+                }</td>
+            </tr>
+        }
+    </table>
+}
