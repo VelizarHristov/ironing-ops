@@ -1,18 +1,20 @@
 package repositories
 
 import javax.inject.{Inject, Singleton}
-import models.Service
+import models.{Service, Category}
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
+class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
+                                  categoryRepository: CategoryRepository)(implicit ec: ExecutionContext) {
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
+  import categoryRepository.categories
 
   private class ServicesTable(tag: Tag) extends Table[Service](tag, "services") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
@@ -27,8 +29,8 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impl
 
   private val services = TableQuery[ServicesTable]
 
-  def list(): Future[Seq[Service]] = db.run {
-    services.result
+  def list(): Future[Seq[(Service, Category)]] = db.run {
+    services.join(categories).result
   }
 
   def byId(id: Long): Future[Option[Service]] = {

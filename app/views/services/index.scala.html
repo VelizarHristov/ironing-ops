@@ -1,4 +1,4 @@
-@(services: Seq[Service])(implicit request: MessagesRequestHeader)
+@(services: Seq[(Service, Category)])(implicit request: MessagesRequestHeader)
 
 @import helper.CSRF
 
@@ -10,15 +10,15 @@
             <tr>
                 <th>Name</th>
                 <th>Price</th>
-                <th>Category ID</th>
+                <th>Category</th>
                 <th colspan="1">Actions</th>
             </tr>
         </thead>
-        @for(service <- services){
+        @for((service, category) <- services){
             <tr>
                 <td>@service.name</td>
                 <td>@service.price</td>
-                <td>@service.categoryId</td>
+                <td>@category.name</td>
                 <td>@helper.form(action = routes.ServiceController.delete(service.id)) {
                     @CSRF.formField
                     <input type="submit" class="btn btn-danger" value="Delete" />

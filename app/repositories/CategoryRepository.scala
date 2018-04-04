@@ -9,12 +9,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
-  private class CategoriesTable(tag: Tag) extends Table[Category](tag, "categories") {
+  class CategoriesTable(tag: Tag) extends Table[Category](tag, "categories") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name", O.Unique)
 
@@ -22,7 +22,7 @@ class CategoryRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(imp
       ((Category.apply _).tupled, Category.unapply)
   }
 
-  private val categories = TableQuery[CategoriesTable]
+  val categories = TableQuery[CategoriesTable]
 
   def list(): Future[Seq[Category]] = db.run {
     categories.result
