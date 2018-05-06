@@ -49,6 +49,10 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
     }.map(_ == 1)
   }
 
+  def updatePrice(id: Long, newPrice: BigDecimal): Future[Boolean] = {
+    Future(true)
+  }
+
   def delete(id: Long): Future[Boolean] = {
     db.run {
       services.filter(_.id === id).delete

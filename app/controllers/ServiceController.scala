@@ -36,6 +36,13 @@ class ServiceController @Inject()(repo: ServiceRepository,
     )(EditServiceForm.apply)(EditServiceForm.unapply)
   }
 
+  val changePriceForm = Form {
+    mapping(
+      "price" -> bigDecimal,
+      "id" -> longNumber
+    )(ChangePriceForm.apply)(ChangePriceForm.unapply)
+  }
+
   def newService() = Action.async { implicit request =>
     categoryRepo.list().map { categories =>
       Ok(views.html.services.form(newServicesForm, categories))
@@ -52,6 +59,16 @@ class ServiceController @Inject()(repo: ServiceRepository,
           )
         }
       case None => Future.successful(NotFound)
+    }
+  }
+
+  def changePrice(id: Long) = Action.async { implicit request =>
+    repo.byId(id).map {
+      case Some(service) =>
+        Ok(views.html.services.change_price_form(
+          changePriceForm.fill(ChangePriceForm.fromService(service))
+        ))
+      case None => NotFound
     }
   }
 
@@ -85,6 +102,19 @@ class ServiceController @Inject()(repo: ServiceRepository,
     )
   }
 
+  def updatePrice() = Action.async { implicit request =>
+    changePriceForm.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(Ok(views.html.services.change_price_form(errorForm)))
+      },
+      form => {
+        repo.updatePrice(form.id, form.price).map(_ =>
+          Redirect(routes.ServiceController.index).flashing("success" -> "price updated")
+        )
+      }
+    )
+  }
+
   def delete(id: Long) = Action.async { implicit request =>
     repo.delete(id).map(x =>
       if (x)
@@ -108,4 +138,10 @@ case class EditServiceForm(name: String, categoryId: Long, id: Long)
 
 object EditServiceForm {
   def fromService(c: Service) = EditServiceForm(c.name, c.categoryId, c.id)
+}
+
+case class ChangePriceForm(price: BigDecimal, id: Long)
+
+object ChangePriceForm {
+  def fromService(c: Service) = ChangePriceForm(c.price, c.id)
 }

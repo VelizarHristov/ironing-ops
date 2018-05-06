@@ -17,8 +17,10 @@ POST    /categories/delete/:id      controllers.CategoryController.delete(id: Lo
 GET     /services                   controllers.ServiceController.index
 GET     /services/new               controllers.ServiceController.newService
 GET     /services/edit/:id          controllers.ServiceController.edit(id: Long)
+GET     /services/change_price/:id  controllers.ServiceController.changePrice(id: Long)
 POST    /services                   controllers.ServiceController.create
 POST    /services/update            controllers.ServiceController.update
+POST    /services/update_price      controllers.ServiceController.updatePrice
 POST    /services/delete/:id        controllers.ServiceController.delete(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path

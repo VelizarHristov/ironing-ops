@@ -1,0 +1,17 @@
+@(service: Form[ChangePriceForm])(implicit request: MessagesRequestHeader)
+
+@main("Ironing") {
+    @b4.vertical.form(routes.ServiceController.updatePrice()) { implicit vfc =>
+
+        <h1>Edit service</h1>
+
+        @b4.number(service("price"), '_label -> "* New Price (£)", 'step -> "0.01")
+
+        <input type="hidden" name="id" value='@service("id").value' >
+
+        @helper.CSRF.formField
+
+        <input type="submit" class="btn btn-secondary" value="Submit"/>
+        <a class="btn btn-secondary" role="button" href='@routes.ServiceController.index()'>Back to services</a>
+    }
+}
