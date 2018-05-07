@@ -1,5 +1,6 @@
 package repositories
 
+import java.sql.Date
 import javax.inject.{Inject, Singleton}
 import models.{Service, Category}
 import play.api.db.slick.DatabaseConfigProvider
@@ -22,8 +23,9 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
     def price = column[BigDecimal]("price")
     def categoryId = column[Long]("category_id")
     def active = column[Boolean]("active")
+    def expiredAt = column[Option[Date]]("expired_at")
 
-    def * = (name, price, categoryId, active, id) <>
+    def * = (name, price, categoryId, active, expiredAt, id) <>
       ((Service.apply _).tupled, Service.unapply)
   }
 

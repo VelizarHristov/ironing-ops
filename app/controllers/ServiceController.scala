@@ -127,7 +127,7 @@ class ServiceController @Inject()(repo: ServiceRepository,
 }
 
 case class NewServiceForm(name: String, price: BigDecimal, categoryId: Long) {
-  lazy val toService: Service = Service(name, price, categoryId, true)
+  lazy val toService: Service = Service(name, price, categoryId, true, None)
 }
 
 object NewServiceForm {
