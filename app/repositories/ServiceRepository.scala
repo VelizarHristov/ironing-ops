@@ -32,7 +32,7 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
   private val services = TableQuery[ServicesTable]
 
   def list(): Future[Seq[(Service, Category)]] = db.run {
-    services.join(categories).on(_.categoryId === _.id).result
+    services.filter(_.expiredAt.isEmpty).join(categories).on(_.categoryId === _.id).result
   }
 
   def byId(id: Long): Future[Option[Service]] = {
@@ -51,8 +51,17 @@ class ServiceRepository @Inject()(dbConfigProvider: DatabaseConfigProvider,
     }.map(_ == 1)
   }
 
-  def updatePrice(id: Long, newPrice: BigDecimal): Future[Boolean] = {
-    Future(true)
+  def updatePrice(id: Long, newPrice: BigDecimal) = {
+    byId(id).flatMap { serviceQuery =>
+      serviceQuery.map { service =>
+        db.run {
+          DBIO.seq(
+            services += service.copy(price = newPrice, id = 0),
+            services.filter(_.id === id).map(_.expiredAt).update(Some(new Timestamp(System.currentTimeMillis())))
+          ).transactionally
+        }
+      }.getOrElse(Future.successful(Unit))
+    }
   }
 
   def delete(id: Long): Future[Boolean] = {
