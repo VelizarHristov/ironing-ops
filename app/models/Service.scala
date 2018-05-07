@@ -1,5 +1,5 @@
 package models
 
-import java.sql.Date
+import java.sql.Timestamp
 
-case class Service(name: String, price: BigDecimal, categoryId: Long, active: Boolean, expiredAt: Option[Date], id: Long = 0)
+case class Service(name: String, price: BigDecimal, categoryId: Long, active: Boolean, expiredAt: Option[Timestamp], id: Long = 0)
