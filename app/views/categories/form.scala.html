@@ -3,13 +3,16 @@
 @isEdit = @{ category("id").value.isDefined }
 
 @main("Ironing") {
-    @b4.vertical.form(if (isEdit) routes.CategoryController.update() else routes.CategoryController.create()) { implicit vfc =>
+    @helper.form(if (isEdit) routes.CategoryController.update() else routes.CategoryController.create()) {
 
         <h1>@if(isEdit) { Editing } else { New } category</h1>
 
-        @b4.text(category("name"), '_label -> "* Name")
+        <div class="form-group">
+            <label for="name">* Name</label>
+            <input type="text" id="name" name="name" value="@category("name").value" required="true" class="form-control">
+        </div>
 
-        <input type="hidden" name="id" value='@category("id").value' >
+        <input type="hidden" name="id" value='@category("id").value'>
 
         @helper.CSRF.formField
 
