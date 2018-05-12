@@ -1,14 +1,27 @@
 @(service: Form[EditServiceForm], categories: Seq[Category])(implicit request: MessagesRequestHeader)
 
 @main("Ironing") {
-    @b4.vertical.form(routes.ServiceController.update()) { implicit vfc =>
+    @helper.form(routes.ServiceController.update()) {
 
         <h1>Edit service</h1>
 
-        @b4.text(service("name"), '_label -> "* Name")
-        @b4.select(service("categoryId"), categories.map(c => (c.id.toString, c.name)), '_label -> "* Category")
+        <div class="form-group">
+            <label for="name">* Name</label>
+            <input type="text" id="name" name="name" value="@service("name").value" required="true" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="categoryId">* Category</label>
+            <select id="categoryId" name="categoryId" class="form-control" required="true">
+                <option value=""></option>
+                @categories.map { category =>
+                    <option value="@category.id.toString" @if(service("categoryId").value.contains(category.id.toString)) { selected="selected" }>
+                        @category.name
+                    </option>
+                }
+            </select>
+        </div>
 
-        <input type="hidden" name="id" value='@service("id").value' >
+        <input type="hidden" name="id" value='@service("id").value'>
 
         @helper.CSRF.formField
 

@@ -1,13 +1,16 @@
 @(service: Form[ChangePriceForm])(implicit request: MessagesRequestHeader)
 
 @main("Ironing") {
-    @b4.vertical.form(routes.ServiceController.updatePrice()) { implicit vfc =>
+    @helper.form(routes.ServiceController.updatePrice()) {
 
-        <h1>Edit service</h1>
+        <h1>Change price</h1>
 
-        @b4.number(service("price"), '_label -> "* New Price (£)", 'step -> "0.01")
+        <div class="form-group">
+            <label for="price">* New Price (£)</label>
+            <input type="number" id="price" name="price" value="@service("price").value" class="form-control" step="0.01">
+        </div>
 
-        <input type="hidden" name="id" value='@service("id").value' >
+        <input type="hidden" name="id" value='@service("id").value'>
 
         @helper.CSRF.formField
 

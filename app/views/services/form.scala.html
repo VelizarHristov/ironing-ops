@@ -1,13 +1,27 @@
 @(service: Form[NewServiceForm], categories: Seq[Category])(implicit request: MessagesRequestHeader)
 
 @main("Ironing") {
-    @b4.vertical.form(routes.ServiceController.create()) { implicit vfc =>
+    @helper.form(routes.ServiceController.create()) {
 
         <h1>New service</h1>
 
-        @b4.text(service("name"), '_label -> "* Name")
-        @b4.number(service("price"), '_label -> "* Price (£)", 'step -> "0.01")
-        @b4.select(service("categoryId"), categories.map(c => (c.id.toString, c.name)), '_label -> "* Category")
+        <div class="form-group">
+            <label for="name">* Name</label>
+            <input type="text" id="name" name="name" value="" required="true" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="price">* Price (£)</label>
+            <input type="number" id="price" name="price" value="" class="form-control" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="categoryId">* Category</label>
+            <select id="categoryId" name="categoryId" class="form-control" required="true">
+                <option value=""></option>
+                @categories.map { category =>
+                    <option value="@category.id.toString">@category.name</option>
+                }
+            </select>
+        </div>
 
         @helper.CSRF.formField
 
