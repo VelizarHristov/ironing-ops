@@ -3,23 +3,57 @@
 @isEdit = @{ customer("id").value.isDefined }
 
 @main("Ironing") {
-    @b4.vertical.form(if (isEdit) routes.CustomerController.update() else routes.CustomerController.create()) { implicit vfc =>
+    @helper.form(if (isEdit) routes.CustomerController.update() else routes.CustomerController.create()) {
 
         <h1>@if(isEdit) { Editing } else { New } customer</h1>
 
-        @b4.text(customer("firstName"), '_label -> "First name")
-        @b4.text(customer("lastName"), '_label -> "Last name")
-        @b4.text(customer("nickname"), '_label -> "* Nickname")
-        @b4.email(customer("email"), '_label -> "Email")
-        @b4.text(customer("phoneHome"), '_label -> "Phone home")
-        @b4.text(customer("phoneMobile"), '_label -> "Phone mobile")
-        @b4.textarea(customer("notes"), '_label -> "Notes")
-        @b4.radio(customer("paymentScheme"),
-            Seq("0" -> "Flat rate", "1" -> "Itemized"),
-            '_label -> "* Payment scheme",
-            'required -> "true")
+        <div class="form-group">
+            <label for="firstName">First name</label>
+            <input type="text" id="firstName" name="firstName" value="@customer("firstName").value" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last name</label>
+            <input type="text" id="lastName" name="lastName" value="@customer("lastName").value" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="nickname">* Nickname</label>
+            <input type="text" id="nickname" name="nickname" value="@customer("nickname").value" required="true" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="@customer("email").value" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="phoneHome">Phone home</label>
+            <input type="text" id="phoneHome" name="phoneHome" value="@customer("phoneHome").value" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="phoneMobile">Phone mobile</label>
+            <input type="text" id="phoneMobile" name="phoneMobile" value="@customer("phoneMobile").value" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" class="form-control">@customer("notes").value</textarea>
+        </div>
+        <div class="form-group">
+            <label>* Payment scheme</label>
+            <div class="form-check">
+                <input type="radio" id="paymentScheme_0" name="paymentScheme" value="0" required="true" class="form-check-input"
+                       @if(customer("paymentScheme").value.contains("0")) { checked="checked" }>
+                <label class="form-check-label" for="paymentScheme_0">
+                    Flat rate
+                </label>
+            </div>
+            <div class="form-check">
+                <input type="radio" id="paymentScheme_1" name="paymentScheme" value="1" required="true" class="form-check-input"
+                    @if(customer("paymentScheme").value.contains("1")) { checked="checked" }>
+                <label class="form-check-label" for="paymentScheme_1">
+                    Itemized
+                </label>
+            </div>
+        </div>
 
-        <input type="hidden" name="id" value='@customer("id").value' >
+        <input type="hidden" name="id" value='@customer("id").value'>
 
         @helper.CSRF.formField
 
