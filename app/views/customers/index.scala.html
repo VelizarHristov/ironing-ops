@@ -32,7 +32,7 @@
             <td><a class="btn btn-secondary" role="button" href='@routes.CustomerController.edit(customer.id)'>Edit</a></td>
             <td>@helper.form(action = routes.CustomerController.delete(customer.id)) {
                 @CSRF.formField
-                <input type="submit" class="btn btn-danger" value="Delete" />
+                <input type="submit" class="btn btn-danger delete-btn" value="Delete"/>
             }</td>
         </tr>
     }
